@@ -1,0 +1,43 @@
+{
+  "name": "d2c-panda-wish",
+  "version": "1.0.0",
+  "description": "Generate a JSON wishlist from PandaPaxxy's god roll Google Sheet (for use on D2Checklist.com, or wherever you want)",
+  "nodemonConfig": {
+    "watch": [
+      "src/**/*.ts"
+    ],
+    "delay": "150"
+  },
+  "scripts": {
+    "start": "npm run build:live",
+    "build": "tsc -p .",
+    "build:live": "nodemon --exec ts-node src/index.ts",
+    "exec": "node lib/index.js",
+    "once": "npm run build && npm run exec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dcaslin/d2c-panda-wish.git"
+  },
+  "keywords": [
+    "destiny",
+    "wishlist",
+    "dimwishlist"
+  ],
+  "author": "Dave Caslin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dcaslin/d2c-panda-wish/issues"
+  },
+  "homepage": "https://github.com/dcaslin/d2c-panda-wish#readme",
+  "dependencies": {
+    "@fast-csv/parse": "^4.2.0",
+    "axios": "^0.19.2"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "nodemon": "^2.0.4",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.9.3"
+  }
+}
