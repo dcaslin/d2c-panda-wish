@@ -12,7 +12,7 @@
     "start": "npm run build:live",
     "build": "tsc -p .",
     "build:live": "nodemon --exec ts-node src/index.ts",
-    "exec": "node lib/index.js",
+    "exec": "node dist/index.js",
     "once": "npm run build && npm run exec",
     "lint": "eslint . --ext .ts"
   },
@@ -33,6 +33,7 @@
   "homepage": "https://github.com/dcaslin/d2c-panda-wish#readme",
   "dependencies": {
     "@fast-csv/parse": "^4.2.0",
+    "@types/node": "^14.0.5",
     "axios": "^0.19.2"
   },
   "devDependencies": {

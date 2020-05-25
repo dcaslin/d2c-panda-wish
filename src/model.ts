@@ -1,3 +1,10 @@
+export interface SheetDef {
+  name: string;
+  id: string;
+  controller: boolean;
+  mnk: boolean;
+}
+
 export interface Cache {
     version?: string;
     Vendor?: any;

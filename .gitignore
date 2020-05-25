@@ -7,7 +7,6 @@
 /lib
 # Only exists if Bazel was run
 /bazel-out
-/data
 
 # dependencies
 /node_modules
