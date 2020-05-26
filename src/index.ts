@@ -1,7 +1,8 @@
-import fs from 'fs';
-import { Cache, SheetDef } from './model';
 import axios, { AxiosInstance } from 'axios';
+import fs from 'fs';
+import { Cache, GunRolls, SheetDef } from './model';
 import { parseSheet } from './parser';
+import { cookGuns } from './cooker';
 
 async function loadManifest(): Promise<Cache> {
     const sManifest = await fs.promises.readFile('./data/destiny2.json', 'utf8');
@@ -118,8 +119,8 @@ const SHEETS: SheetDef[] = [
     {
         name: 'worthy - mnk',
         id: '868628670',
-        controller: true,
-        mnk: false
+        controller: false,
+        mnk: true
     }, {
         name: 'worthy - controller',
         id: '964017795',
@@ -133,7 +134,7 @@ async function downloadSheet(ax: AxiosInstance, sd: SheetDef): Promise<string> {
     // "https://docs.google.com/spreadsheets/d/<document_id>/export?format=csv&gid=<sheet_id>"
 
     const url = `https://docs.google.com/spreadsheets/d/${DOC_ID}/export?format=csv&gid=${sd.id}`;
-    console.log('Downloading: '+url);
+    console.log('Downloading: ' + url);
     const resp = await ax.get(url, {
         responseType: 'text'
     });
@@ -141,37 +142,44 @@ async function downloadSheet(ax: AxiosInstance, sd: SheetDef): Promise<string> {
 
 }
 
-async function downloadSpreadSheet() {
+async function downloadSpreadSheet(db: Cache) {
     const ax = axios.create({
         timeout: 10000
     });
-    if (!fs.existsSync('./tmp/')){
+    if (!fs.existsSync('./tmp/')) {
         fs.mkdirSync('./tmp/');
     }
     let count = 0;
+    let allGuns: GunRolls[] = [];
     for (const sd of SHEETS) {
         let csv;
-        const fileName = './tmp/'+sd.id+'.csv';
+        const fileName = './tmp/' + sd.id + '.csv';
         if (fs.existsSync(fileName)) {
             csv = fs.readFileSync(fileName, 'utf-8');
-            console.log('Found: '+fileName+' for '+sd.name);
+            console.log('Found: ' + fileName + ' for ' + sd.name);
         } else {
-            csv = await downloadSheet(ax, sd);    
-            await fs.promises.writeFile('./tmp/'+sd.name+'.csv', csv);
-            await fs.promises.writeFile('./tmp/'+sd.id+'.csv', csv);
+            csv = await downloadSheet(ax, sd);
+            await fs.promises.writeFile('./tmp/' + sd.name + '.csv', csv);
+            await fs.promises.writeFile('./tmp/' + sd.id + '.csv', csv);
         }
-        count+= await parseSheet(sd, csv);
+        const guns = await parseSheet(sd, csv);
+        allGuns = allGuns.concat(guns);
+        count += guns.length;
+
     }
-    console.log("Total: "+count);
+    console.log('Total: ' + count);
+    await fs.promises.writeFile('./tmp/allGuns.json', JSON.stringify(allGuns, null, 2));
+    const cooked = cookGuns(allGuns, db);
+    await fs.promises.writeFile('./tmp/cooked.json', JSON.stringify(cooked, null, 2));
 }
 
 async function run() {
     console.log('start');
     try {
         console.log('run');
-        const cache = loadManifest();
+        const cache = await loadManifest();
 
-        await downloadSpreadSheet();
+        await downloadSpreadSheet(cache);
 
 
     } catch (exc) {

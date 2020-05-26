@@ -1,3 +1,33 @@
+
+export interface GunRoll {
+  masterwork: string|null,
+  godPerks: string[],
+  goodPerks: string[]
+}
+
+export interface GunRolls {
+  name: string;
+  sheet: string;
+  mnk: boolean;
+  controller: boolean;
+  pve: GunRoll;
+  pvp: GunRoll;
+}
+
+export interface CsvRow {
+  field1: string;
+  field2: string;
+  field3: string;
+  field4: string;
+  field5: string;
+  field6: string;
+  field7: string;
+  field8: string;
+  field9: string;
+  field10: string;
+}
+
+
 export interface SheetDef {
   name: string;
   id: string;
