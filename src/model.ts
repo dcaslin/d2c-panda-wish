@@ -1,6 +1,6 @@
 
 export interface GunRoll {
-  masterwork: string|null,
+  masterwork: string[],
   godPerks: string[],
   goodPerks: string[]
 }
@@ -48,8 +48,8 @@ export interface Cache {
     Milestone?: any;
     Faction?: any;
     Progression?: any;
-    InventoryItem?: { [key: string]: InventoryItem };
-    Stat?: any;
+    InventoryItem: { [key: string]: InventoryItem };
+    Stat: any;
     Objective?: { [key: string]: Objective };
     ActivityModifier?: any;
     Perk?: any;

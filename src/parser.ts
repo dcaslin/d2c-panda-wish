@@ -23,9 +23,27 @@ function appendPerks(roll: GunRoll, data: string): void {
     }
 }
 
+function grabMw(mwString: string): string[] {
+    if (isEmpty(mwString)){ 
+        return [];
+    }
+    mwString = mwString.toLowerCase();
+    const mws = mwString.split(' or ');
+    const returnMe = [];
+    for (let mw of mws) {
+        mw = mw.trim();
+        if ('reload' == mw) {
+            returnMe.push('reload speed');
+        } else {
+            returnMe.push(mw);
+        }
+    }
+    return returnMe;
+}
+
 function parseRoll(row: CsvRow): GunRoll {
     const roll: GunRoll = {
-        masterwork: isEmpty(row.field9)?null: row.field9.toLowerCase(),
+        masterwork: grabMw(row.field9),
         godPerks: [],
         goodPerks: []
     }
@@ -37,7 +55,7 @@ function parseRoll(row: CsvRow): GunRoll {
 }
 
 function parseGun(sheet: SheetDef, pveRow: CsvRow, pvpRow: CsvRow): GunRolls {
-    const name = pveRow.field1;
+    const name = pveRow.field1.toLowerCase();
     const pveRoll = parseRoll(pveRow);
     const pvpRoll = parseRoll(pvpRow);
     const returnMe: GunRolls = {
@@ -63,7 +81,7 @@ export async function parseSheet(sheetDef: SheetDef, csvString: string): Promise
     for (let i =0 ; i< (jsonObj.length-1); i++) {
         const curRow = jsonObj[i];
         const nextRow = jsonObj[i+1];
-        if (curRow.field10.toLowerCase()=='pve') {
+        if (curRow.field10 && curRow.field10.toLowerCase()=='pve') {
             if (nextRow.field10.toLowerCase()=='pvp') {
                 // nothing
                 const gun = parseGun(sheetDef, curRow, nextRow);

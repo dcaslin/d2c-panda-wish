@@ -10,7 +10,8 @@ async function loadManifest(): Promise<Cache> {
     return db;
 }
 
-const DOC_ID = '1UlPqO4koKRcqMxl2VO4JzdgkKyY7LW07W0k91S_Yl8U';
+// const DOC_ID = '1UlPqO4koKRcqMxl2VO4JzdgkKyY7LW07W0k91S_Yl8U';
+const DOC_ID = '1G9Lwd-cuBPyY9MdElm3V35SJwdUB7YSsJJTf3s0qwDc';
 const SHEETS: SheetDef[] = [
     {
         name: 'crucible',
@@ -152,25 +153,27 @@ async function downloadSpreadSheet(db: Cache) {
     let count = 0;
     let allGuns: GunRolls[] = [];
     for (const sd of SHEETS) {
-        let csv;
-        const fileName = './tmp/' + sd.id + '.csv';
-        if (fs.existsSync(fileName)) {
-            csv = fs.readFileSync(fileName, 'utf-8');
-            console.log('Found: ' + fileName + ' for ' + sd.name);
-        } else {
-            csv = await downloadSheet(ax, sd);
+        // let csv;
+        // const fileName = './tmp/' + sd.id + '.csv';
+        // if (fs.existsSync(fileName)) {
+            // const csv = fs.readFileSync(fileName, 'utf-8');
+            // console.log('Found: ' + fileName + ' for ' + sd.name);
+        // } else {
+            const csv = await downloadSheet(ax, sd);
             await fs.promises.writeFile('./tmp/' + sd.name + '.csv', csv);
             await fs.promises.writeFile('./tmp/' + sd.id + '.csv', csv);
-        }
+        // }
         const guns = await parseSheet(sd, csv);
+        // check early
+        cookGuns(guns, db);
         allGuns = allGuns.concat(guns);
         count += guns.length;
 
     }
     console.log('Total: ' + count);
     await fs.promises.writeFile('./tmp/allGuns.json', JSON.stringify(allGuns, null, 2));
-    const cooked = cookGuns(allGuns, db);
-    await fs.promises.writeFile('./tmp/cooked.json', JSON.stringify(cooked, null, 2));
+    // const cooked = cookGuns(allGuns, db);
+    // await fs.promises.writeFile('./tmp/cooked.json', JSON.stringify(cooked, null, 2));
 }
 
 async function run() {
