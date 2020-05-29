@@ -46,4 +46,5 @@ testem.log
 .DS_Store
 Thumbs.db
 panda-godrolls.json
+panda-godrolls-with-errors.json
 sheet-errors.txt
