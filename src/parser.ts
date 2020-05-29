@@ -1,5 +1,5 @@
 import csvToJson from 'csvtojson';
-import { CsvRow, SheetDef, GunRolls, Cache, GunRoll } from './model';
+import { CsvRow, GunRoll, GunRolls, SheetDef } from './model';
 
 function isEmpty(s: string): boolean {
     if (s==null || s.trim().length == 0 || s.toLowerCase()=='n/a') {
@@ -15,7 +15,7 @@ function appendPerks(roll: GunRoll, data: string): void {
     let firstDone = false;
     for (const perk of perks) {
         if (!firstDone) {
-            roll.godPerks.push(perk);
+            roll.greatPerks.push(perk);
             firstDone = true;
         } else {
             roll.goodPerks.push(perk);
@@ -44,7 +44,7 @@ function grabMw(mwString: string): string[] {
 function parseRoll(row: CsvRow): GunRoll {
     const roll: GunRoll = {
         masterwork: grabMw(row.field9),
-        godPerks: [],
+        greatPerks: [],
         goodPerks: []
     }
     appendPerks(roll, row.field5);

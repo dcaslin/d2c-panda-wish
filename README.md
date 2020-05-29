@@ -15,4 +15,7 @@ Credit: Based loosely on [Little Light](https://play.google.com/store/apps/detai
 
 `npm install`
 
-`npm start`
+`npm start` or `npm run once`
+
+This will print out to the console. Bad validation messages have a `xxxxx` prefix, and good messages have a `*****` prefix. It will also write out files to the `./tmp` folder for debugging.
+Finally it will produce `sheet-errors.txt` and `./panda-godrolls.json` (`./panda-godrolls-with-errors.json` if there are errors). That last one, `panda-godrolls.txt` is what you're looking for!

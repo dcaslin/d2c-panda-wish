@@ -1,8 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
 import fs from 'fs';
+import { cookGuns, validateGuns } from './cooker';
 import { Cache, GunRolls, SheetDef } from './model';
 import { parseSheet } from './parser';
-import { cookGuns, validateGuns } from './cooker';
 
 async function loadManifest(): Promise<Cache> {
     const sManifest = await fs.promises.readFile('./data/destiny2.json', 'utf8');
@@ -152,8 +152,10 @@ async function downloadSpreadSheet(db: Cache) {
     }
     let count = 0;
     let allGuns: GunRolls[] = [];
-    let problems = false;
+    let problems = 0;
+    const errMsgs: string[] = [];
     for (const sd of SHEETS) {
+        // use temp files to not hammer google sheets URL while testing
         // let csv;
         // const fileName = './tmp/' + sd.id + '.csv';
         // if (fs.existsSync(fileName)) {
@@ -166,20 +168,31 @@ async function downloadSpreadSheet(db: Cache) {
         // }
         const guns = await parseSheet(sd, csv);
         // check early
-        problems = !validateGuns(sd, guns, db) || problems;
+        problems += validateGuns(sd, guns, db, errMsgs);
         allGuns = allGuns.concat(guns);
         count += guns.length;
 
     }
     console.log('Total: ' + count);
-    if (problems == true) {
-        console.error('There are problems to correct');
+    if (problems > 0) {
+        console.log(`xxxxx There are ${problems} problems to correct`);
     } else {
-        console.error('Sheets are all perfect!');
+        console.log('***** Sheets are all perfect!');
     }
     await fs.promises.writeFile('./tmp/allGuns.json', JSON.stringify(allGuns, null, 2));
     const cooked = cookGuns(allGuns);
-    await fs.promises.writeFile('./tmp/cooked.json', JSON.stringify(cooked, null, 2));
+
+    let allErrors = '';
+    for (const s of errMsgs) {
+        allErrors += s;
+        allErrors += '\n';
+    }
+    await fs.promises.writeFile('./sheet-errors.txt', allErrors);
+    if (problems==0 ) {
+        await fs.promises.writeFile('./panda-godrolls.json', JSON.stringify(cooked, null, 2));
+    } else {
+        await fs.promises.writeFile('./panda-godrolls-with-errors.json', JSON.stringify(cooked, null, 2));
+    }
 }
 
 async function run() {

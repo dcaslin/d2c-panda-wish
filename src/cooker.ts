@@ -1,24 +1,4 @@
-import { GunRolls, Cache, GunRoll, InventoryItem, SheetDef } from './model';
-import * as _ from 'lodash';
-
-function mergeRoll(gun1: GunRoll, gun2: GunRoll): GunRoll {
-    let mw = null;
-    if (gun1.masterwork == gun2.masterwork) {
-        mw = gun1.masterwork;
-    }
-    else if (gun1.masterwork && !gun2.masterwork) {
-        mw = gun1.masterwork;
-    } else if (gun2.masterwork && !gun1.masterwork) {
-        mw = gun2.masterwork;
-    } else {
-        throw new Error(gun1.masterwork + ' does not match ' + gun2.masterwork);
-    }
-    return {
-        masterwork: mw,
-        godPerks: _.union(gun1.godPerks, gun2.godPerks),
-        goodPerks: _.union(gun1.goodPerks, gun2.goodPerks)
-    }
-}
+import { Cache, GunRoll, GunRolls, SheetDef } from './model';
 
 function chooseRoll(gun1: GunRolls, gun2: GunRolls): GunRolls {
     let returnMe = gun1;
@@ -69,41 +49,54 @@ function dedupeGuns(allGuns: GunRolls[]): GunRolls[] {
     return deduped;
 }
 
-function validateGunRoll(gun: GunRolls, roll: GunRoll, perkCandidates: Set<string>, mwCandidates: Set<string>): number {
+function validateGunRoll(gun: GunRolls, roll: GunRoll, 
+    perkCandidates: Set<string>, 
+    mwCandidates: Set<string>,
+    errorMsgs: string[]): number {
     let problems = 0;
     for (const mw of roll.masterwork) {
         if (!mwCandidates.has(mw)) {
-            console.error(`bad mw ${mw}. From ${gun.name} on ${gun.sheet}`);
+            const msg = `Bad MW: ${mw} | From ${gun.name} on ${gun.sheet}`;
+            errorMsgs.push(msg);
+            console.log('xxxxx ' + msg);
             problems++;
         }
     }
-    for (const perk of roll.godPerks) {
+    for (const perk of roll.greatPerks) {
         if (!perkCandidates.has(perk)) {
-            console.error(`bad perk ${perk}. From ${gun.name} on ${gun.sheet}`);
+            const msg = `Bad perk: ${perk} | From ${gun.name} on ${gun.sheet}`;
+            errorMsgs.push(msg);
+            console.log('xxxxx ' + msg);
             problems++;
         }
     }
     for (const perk of roll.goodPerks) {
         if (!perkCandidates.has(perk)) {
-            console.error(`bad perk ${perk}. From ${gun.name} on ${gun.sheet}`);
+            const msg = `Bad perk: ${perk} | From ${gun.name} on ${gun.sheet}`;
+            errorMsgs.push(msg);
+            console.log('xxxxx ' + msg);
             problems++;
         }
     }
     return problems;
 }
 
-function validateGunRolls(gun: GunRolls, gunCandidates: Set<string>, perkCandidates: Set<string>, mwCandidates: Set<string>): number {
+function validateGunRolls(gun: GunRolls, gunCandidates: Set<string>, 
+    perkCandidates: Set<string>, mwCandidates: Set<string>,
+    errorMsgs: string[]): number {
     let problems = 0;
     if (!gunCandidates.has(gun.name)) {
-        console.error(`Gun name ${gun.name} is missing. From sheet ${gun.sheet}`);
+        const msg = `Gun name missing: ${gun.name} | From sheet ${gun.sheet}`;
+        console.log('xxxxx ' + msg);
+        errorMsgs.push(msg);
         problems++;
     }
-    problems+= validateGunRoll(gun, gun.pve, perkCandidates, mwCandidates);
-    problems+= validateGunRoll(gun, gun.pvp, perkCandidates, mwCandidates);
+    problems+= validateGunRoll(gun, gun.pve, perkCandidates, mwCandidates, errorMsgs);
+    problems+= validateGunRoll(gun, gun.pvp, perkCandidates, mwCandidates, errorMsgs);
     return problems;
 }
 
-export function validateGuns(sd:SheetDef, allGuns: GunRolls[], db: Cache): boolean {
+export function validateGuns(sd:SheetDef, allGuns: GunRolls[], db: Cache, errMsgs: string[]): number {
     const perkCandidates = new Set<string>();
     const gunCandidates = new Set<string>();
     const mwCandidates = new Set<string>();
@@ -126,14 +119,15 @@ export function validateGuns(sd:SheetDef, allGuns: GunRolls[], db: Cache): boole
 
     let problems = 0;
     for (const gun of allGuns) {
-        problems+=validateGunRolls(gun, gunCandidates, perkCandidates, mwCandidates);
+        problems+=validateGunRolls(gun, gunCandidates, perkCandidates, mwCandidates, errMsgs);
     }
     if (problems > 0) {
-        console.error(`Sheet ${sd.name} has ${problems} problems to correct.`);
+        const msg = `--- Sheet ${sd.name} has ${problems} problems to correct.---`;
+        console.log('xxxxx '+msg); 
     } else {
-        console.error(`Sheet ${sd.name} is perfect!`);
+        console.log(`***** Sheet ${sd.name} is perfect!`);
     }
-    return problems==0;
+    return problems;
 
 }
 

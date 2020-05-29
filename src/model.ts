@@ -1,7 +1,7 @@
 
 export interface GunRoll {
   masterwork: string[],
-  godPerks: string[],
+  greatPerks: string[],
   goodPerks: string[]
 }
 
