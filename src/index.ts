@@ -190,6 +190,7 @@ async function downloadSpreadSheet(db: Cache) {
     await fs.promises.writeFile('./sheet-errors.txt', allErrors);
     if (problems==0 ) {
         await fs.promises.writeFile('./panda-godrolls.json', JSON.stringify(cooked, null, 2));
+        await fs.promises.writeFile('../d2-checklist/src/assets/panda-godrolls.min.json', JSON.stringify(cooked));
     } else {
         await fs.promises.writeFile('./panda-godrolls-with-errors.json', JSON.stringify(cooked, null, 2));
     }
