@@ -1,4 +1,4 @@
-import { GunRolls, Cache, GunRoll, InventoryItem } from './model';
+import { GunRolls, Cache, GunRoll, InventoryItem, SheetDef } from './model';
 import * as _ from 'lodash';
 
 function mergeRoll(gun1: GunRoll, gun2: GunRoll): GunRoll {
@@ -25,7 +25,6 @@ function chooseRoll(gun1: GunRolls, gun2: GunRolls): GunRolls {
     if (gun2.pve.goodPerks.length > gun1.pve.goodPerks.length) {
         returnMe = gun2;
     }
-    // console.log(`    Dupe for ${gun1.name}: ${gun1.sheet} vs ${gun2.sheet}. Choosing: ${returnMe.sheet}`);
     return returnMe;
 }
 
@@ -70,34 +69,41 @@ function dedupeGuns(allGuns: GunRolls[]): GunRolls[] {
     return deduped;
 }
 
-function validateGunRoll(gun: GunRolls, roll: GunRoll, perkCandidates: Set<string>, mwCandidates: Set<string>): void {
-    const mw = roll.masterwork;
+function validateGunRoll(gun: GunRolls, roll: GunRoll, perkCandidates: Set<string>, mwCandidates: Set<string>): number {
+    let problems = 0;
     for (const mw of roll.masterwork) {
         if (!mwCandidates.has(mw)) {
             console.error(`bad mw ${mw}. From ${gun.name} on ${gun.sheet}`);
+            problems++;
         }
     }
     for (const perk of roll.godPerks) {
         if (!perkCandidates.has(perk)) {
             console.error(`bad perk ${perk}. From ${gun.name} on ${gun.sheet}`);
+            problems++;
         }
     }
     for (const perk of roll.goodPerks) {
         if (!perkCandidates.has(perk)) {
             console.error(`bad perk ${perk}. From ${gun.name} on ${gun.sheet}`);
+            problems++;
         }
     }
+    return problems;
 }
 
-function validateGunRolls(gun: GunRolls, gunCandidates: Set<string>, perkCandidates: Set<string>, mwCandidates: Set<string>): void {
+function validateGunRolls(gun: GunRolls, gunCandidates: Set<string>, perkCandidates: Set<string>, mwCandidates: Set<string>): number {
+    let problems = 0;
     if (!gunCandidates.has(gun.name)) {
         console.error(`Gun name ${gun.name} is missing. From sheet ${gun.sheet}`);
+        problems++;
     }
-    validateGunRoll(gun, gun.pve, perkCandidates, mwCandidates);
-    validateGunRoll(gun, gun.pvp, perkCandidates, mwCandidates);
+    problems+= validateGunRoll(gun, gun.pve, perkCandidates, mwCandidates);
+    problems+= validateGunRoll(gun, gun.pvp, perkCandidates, mwCandidates);
+    return problems;
 }
 
-export function cookGuns(allGuns: GunRolls[], db: Cache): GunRolls[] {
+export function validateGuns(sd:SheetDef, allGuns: GunRolls[], db: Cache): boolean {
     const perkCandidates = new Set<string>();
     const gunCandidates = new Set<string>();
     const mwCandidates = new Set<string>();
@@ -113,16 +119,26 @@ export function cookGuns(allGuns: GunRolls[], db: Cache): GunRolls[] {
             gunCandidates.add(ii.displayProperties.name.toLowerCase());
         }
     }
-
     for (const key of Object.keys(db.Stat)) {
         const stat = db.Stat[key];
         mwCandidates.add(stat.displayProperties.name.toLowerCase());
     }
-    const deduped = dedupeGuns(allGuns);
 
-    for (const gun of deduped) {
-        validateGunRolls(gun, gunCandidates, perkCandidates, mwCandidates);
+    let problems = 0;
+    for (const gun of allGuns) {
+        problems+=validateGunRolls(gun, gunCandidates, perkCandidates, mwCandidates);
     }
+    if (problems > 0) {
+        console.error(`Sheet ${sd.name} has ${problems} problems to correct.`);
+    } else {
+        console.error(`Sheet ${sd.name} is perfect!`);
+    }
+    return problems==0;
 
+}
+
+export function cookGuns(allGuns: GunRolls[]): GunRolls[] {
+
+    const deduped = dedupeGuns(allGuns);
     return deduped;
 }

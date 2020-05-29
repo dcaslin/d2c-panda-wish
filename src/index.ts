@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 import fs from 'fs';
 import { Cache, GunRolls, SheetDef } from './model';
 import { parseSheet } from './parser';
-import { cookGuns } from './cooker';
+import { cookGuns, validateGuns } from './cooker';
 
 async function loadManifest(): Promise<Cache> {
     const sManifest = await fs.promises.readFile('./data/destiny2.json', 'utf8');
@@ -152,6 +152,7 @@ async function downloadSpreadSheet(db: Cache) {
     }
     let count = 0;
     let allGuns: GunRolls[] = [];
+    let problems = false;
     for (const sd of SHEETS) {
         // let csv;
         // const fileName = './tmp/' + sd.id + '.csv';
@@ -165,21 +166,25 @@ async function downloadSpreadSheet(db: Cache) {
         // }
         const guns = await parseSheet(sd, csv);
         // check early
-        cookGuns(guns, db);
+        problems = !validateGuns(sd, guns, db) || problems;
         allGuns = allGuns.concat(guns);
         count += guns.length;
 
     }
     console.log('Total: ' + count);
+    if (problems == true) {
+        console.error('There are problems to correct');
+    } else {
+        console.error('Sheets are all perfect!');
+    }
     await fs.promises.writeFile('./tmp/allGuns.json', JSON.stringify(allGuns, null, 2));
-    // const cooked = cookGuns(allGuns, db);
-    // await fs.promises.writeFile('./tmp/cooked.json', JSON.stringify(cooked, null, 2));
+    const cooked = cookGuns(allGuns);
+    await fs.promises.writeFile('./tmp/cooked.json', JSON.stringify(cooked, null, 2));
 }
 
 async function run() {
-    console.log('start');
+    console.log('Starting');
     try {
-        console.log('run');
         const cache = await loadManifest();
 
         await downloadSpreadSheet(cache);
@@ -188,9 +193,7 @@ async function run() {
     } catch (exc) {
         console.dir(exc);
     } finally {
-        console.log('done');
+        console.log('Complete');
     }
 }
-
-console.log('2');
 run();

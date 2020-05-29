@@ -97,6 +97,5 @@ export async function parseSheet(sheetDef: SheetDef, csvString: string): Promise
 
     }
     console.log('Found: '+count);
-   
     return guns;
 }
