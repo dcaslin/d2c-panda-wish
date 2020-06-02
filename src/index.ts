@@ -10,8 +10,8 @@ async function loadManifest(): Promise<Cache> {
     return db;
 }
 
-// const DOC_ID = '1UlPqO4koKRcqMxl2VO4JzdgkKyY7LW07W0k91S_Yl8U';
-const DOC_ID = '1G9Lwd-cuBPyY9MdElm3V35SJwdUB7YSsJJTf3s0qwDc';
+const DOC_ID = '1UlPqO4koKRcqMxl2VO4JzdgkKyY7LW07W0k91S_Yl8U'; // Panda
+// const DOC_ID = '1G9Lwd-cuBPyY9MdElm3V35SJwdUB7YSsJJTf3s0qwDc'; //d2c
 const SHEETS: SheetDef[] = [
     {
         name: 'crucible',
