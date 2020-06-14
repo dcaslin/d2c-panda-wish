@@ -33,6 +33,7 @@ export interface SheetDef {
   id: string;
   controller: boolean;
   mnk: boolean;
+  overrideDocId?: string;
 }
 
 export interface Cache {

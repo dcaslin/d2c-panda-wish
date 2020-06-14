@@ -10,8 +10,10 @@ async function loadManifest(): Promise<Cache> {
     return db;
 }
 
-const DOC_ID = '1UlPqO4koKRcqMxl2VO4JzdgkKyY7LW07W0k91S_Yl8U'; // Panda
+const DOC_ID = '1UlPqO4koKRcqMxl2VO4JzdgkKyY7LW07W0k91S_Yl8U'; // panda
 // const DOC_ID = '1G9Lwd-cuBPyY9MdElm3V35SJwdUB7YSsJJTf3s0qwDc'; //d2c
+// const DOC_ID = '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI'; // new panda
+ 
 const SHEETS: SheetDef[] = [
     {
         name: 'crucible',
@@ -127,6 +129,19 @@ const SHEETS: SheetDef[] = [
         id: '964017795',
         controller: true,
         mnk: false
+    }, 
+    // {
+    //     name: 'arrivals - mnk',
+    //     id: '656190151',
+    //     controller: false,
+    //     mnk: true
+    // }, 
+    {
+        overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
+        name: 'arrivals - controller',
+        id: '245264734',
+        controller: true,
+        mnk: false
     }
 ];
 
@@ -134,7 +149,11 @@ const SHEETS: SheetDef[] = [
 async function downloadSheet(ax: AxiosInstance, sd: SheetDef): Promise<string> {
     // "https://docs.google.com/spreadsheets/d/<document_id>/export?format=csv&gid=<sheet_id>"
 
-    const url = `https://docs.google.com/spreadsheets/d/${DOC_ID}/export?format=csv&gid=${sd.id}`;
+    let url = `https://docs.google.com/spreadsheets/d/${DOC_ID}/export?format=csv&gid=${sd.id}`;
+    if (sd.overrideDocId) {
+        console.log('Using override DOC ID');
+        url = `https://docs.google.com/spreadsheets/d/${sd.overrideDocId}/export?format=csv&gid=${sd.id}`;
+    }
     console.log('Downloading: ' + url);
     const resp = await ax.get(url, {
         responseType: 'text'
