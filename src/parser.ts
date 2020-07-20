@@ -11,6 +11,9 @@ function isEmpty(s: string): boolean {
 function appendPerks(roll: GunRoll, data: string): void {
     if (isEmpty(data)) return;
     data = data.toLowerCase();
+    if (data.startsWith('any - ')) {
+        data = data.substr('any - '.length);
+    }
     const perks = data.split(', ');
     let firstDone = false;
     for (const perk of perks) {
