@@ -18,131 +18,165 @@ const SHEETS: SheetDef[] = [
     {
         name: 'crucible',
         id: '118580353',
+        // id: '962067997',
         controller: true,
         mnk: true
     },
     {
         name: 'factions',
-        id: '314004979',
+        id: '314004979', //1848110149
+        // id: '1848110149', //1848110149
         controller: true,
         mnk: true
     },
     {
         name: 'gunsmith',
-        id: '1805549613',
+        id: '1805549613', //239833402
+        // id: '239833402', //239833402
         controller: true,
         mnk: true
     },
     {
         name: 'iron-banner',
-        id: '1886264796',
+        id: '1886264796', //1451426902
+        // id: '1451426902', //1451426902
         controller: true,
         mnk: true
     },
     {
         name: 'leviathan',
-        id: '548389956',
+        id: '548389956', //462612581
+        // id: '462612581', //462612581
         controller: true,
         mnk: true
     },
     {
         name: 'trials-nine',
-        id: '1719954219',
+        id: '1719954219', //1724140575
+        // id: '1724140575', //1724140575
         controller: true,
         mnk: true
     },
     {
         name: 'vanguard',
-        id: '1180559530',
+        id: '1180559530',  //0
+        // id: '0',  //0
         controller: true,
         mnk: true
     },
     {
         name: 'world',
-        id: '2054777441',
+        id: '2054777441', //1334420466
+        // id: '1334420466', //1334420466
         controller: true,
         mnk: true
     },
     {
         name: 'CoO',
-        id: '1581709148',
+        id: '1581709148', //1796461492
+        // id: '1796461492', //1796461492
         controller: true,
         mnk: true
     },
-
     {
         name: 'warmind',
-        id: '1887133722',
+        id: '1887133722', //2059088939
+        // id: '2059088939', //2059088939
         controller: true,
         mnk: true
     },
     {
         name: 'forsaken',
-        id: '454784100',
+        id: '454784100', //521791848
+        // id: '521791848', //521791848
         controller: true,
         mnk: true
     },
     {
         name: 'outlaw',
-        id: '1048378745',
+        id: '1048378745', //1941010486
+        // id: '1941010486', //1941010486
         controller: true,
         mnk: true
     },
     {
         name: 'forge',
-        id: '1040045404',
+        id: '1040045404', //639950378
+        // id: '639950378', //639950378
         controller: true,
         mnk: true
     }, {
         name: 'drifter',
-        id: '1699940197',
+        id: '1699940197', //1410036383
+        // id: '1410036383', //1410036383
         controller: true,
         mnk: true
     }, {
         name: 'opulence',
-        id: '186668623',
+        id: '186668623', //2105660371
+        // id: '2105660371', //2105660371
         controller: true,
         mnk: true
     }, {
         name: 'undying',
-        id: '2008495226',
+        id: '2008495226', //341176218
+        // id: '341176218', //341176218
         controller: true,
         mnk: true
     }, {
         name: 'dawn - mnk ',
-        id: '366622822',
+        id: '366622822', //1520339200
+        // id: '1520339200', //1520339200
         controller: false,
         mnk: true
     }, {
         name: 'dawn - controller',
-        id: '1051377705',
+        id: '1051377705', //1421445099
+        // id: '1421445099', //1421445099
         controller: true,
         mnk: false
     },
     {
         name: 'worthy - mnk',
-        id: '868628670',
+        id: '868628670', //2143094443
+        // id: '2143094443', //2143094443
         controller: false,
         mnk: true
     }, {
         name: 'worthy - controller',
-        id: '964017795',
+        id: '964017795', //417047554
+        // id: '417047554', //417047554
         controller: true,
         mnk: false
     }, 
     {
         name: 'arrivals - mnk',
-        id: '50657812',
+        id: '50657812', //656190151
+        // id: '656190151', //656190151
         controller: false,
         mnk: true
     }, 
     {
-        // overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
         name: 'arrivals - controller',
-        id: '997388828',
+        id: '997388828', //245264734
+        // id: '245264734', //245264734
         controller: true,
         mnk: false
-    }
+    },
+    {
+        overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
+        name: 'hunt - mnk',
+        id: '167346674', //167346674
+        controller: false,
+        mnk: true
+    },
+    {
+        overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
+        name: 'hunt - controller',
+        id: '119709700', //119709700
+        controller: true,
+        mnk: false
+    } 
 ];
 
 
