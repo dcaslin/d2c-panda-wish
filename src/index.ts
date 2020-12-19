@@ -164,16 +164,18 @@ const SHEETS: SheetDef[] = [
         mnk: false
     },
     {
-        overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
+        // overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
         name: 'hunt - mnk',
-        id: '167346674', //167346674
+        // id: '167346674', //222338306
+        id: '222338306', //222338306
         controller: false,
         mnk: true
     },
     {
-        overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
+        // overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
         name: 'hunt - controller',
-        id: '119709700', //119709700
+        // id: '119709700', //1725410347
+        id: '1725410347', // prod
         controller: true,
         mnk: false
     } 
