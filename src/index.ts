@@ -12,7 +12,7 @@ async function loadManifest(): Promise<Cache> {
 
 const DOC_ID = '1UlPqO4koKRcqMxl2VO4JzdgkKyY7LW07W0k91S_Yl8U'; // panda
 // const DOC_ID = '1G9Lwd-cuBPyY9MdElm3V35SJwdUB7YSsJJTf3s0qwDc'; //d2c
-// const DOC_ID = '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI'; // new panda
+// const DOC_ID = '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI'; // Panda WIP
  
 const SHEETS: SheetDef[] = [
     {
@@ -176,6 +176,20 @@ const SHEETS: SheetDef[] = [
         name: 'hunt - controller',
         // id: '119709700', //1725410347
         id: '1725410347', // prod
+        controller: true,
+        mnk: false
+    } ,
+    {
+        overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
+        name: 'chosen - mnk',        
+        id: '823480562', 
+        controller: false,
+        mnk: true
+    },
+    {
+        overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
+        name: 'chosen - controller',
+        id: '1910720411', // prod
         controller: true,
         mnk: false
     } 

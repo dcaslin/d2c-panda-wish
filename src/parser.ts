@@ -58,7 +58,13 @@ function parseRoll(row: CsvRow): GunRoll {
 }
 
 function parseGun(sheet: SheetDef, pveRow: CsvRow, pvpRow: CsvRow): GunRolls {
-    const name = pveRow.field1.toLowerCase();
+    let name = pveRow.field1.toLowerCase();
+    let version = 0;
+    if (name.endsWith(' s14')) {
+        name = name.substring(0, name.length - ' s14'.length);
+        version = 1;
+        console.log('Version 1');
+    }
     const pveRoll = parseRoll(pveRow);
     const pvpRoll = parseRoll(pvpRow);
     const returnMe: GunRolls = {
@@ -67,9 +73,9 @@ function parseGun(sheet: SheetDef, pveRow: CsvRow, pvpRow: CsvRow): GunRolls {
         pve: pveRoll,
         pvp: pvpRoll,
         mnk: sheet.mnk, 
-        controller: sheet.controller
-    }
-   
+        controller: sheet.controller,
+        version: version
+    }    
     return returnMe;
 }
 

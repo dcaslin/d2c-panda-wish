@@ -1,3 +1,6 @@
 {
-    "git.ignoreLimitWarning": false
+    "git.ignoreLimitWarning": false,
+    "search.exclude": {
+        "**/data": true
+    }
 }
