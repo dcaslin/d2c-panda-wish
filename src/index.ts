@@ -192,6 +192,20 @@ const SHEETS: SheetDef[] = [
         id: '1910720411', // prod
         controller: true,
         mnk: false
+    },
+    {
+        overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
+        name: 'random exotic - mnk',        
+        id: '1374253866', 
+        controller: false,
+        mnk: true
+    },
+    {
+        overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
+        name: 'random exotic - controller',
+        id: '963951103', // prod
+        controller: true,
+        mnk: false
     } 
 ];
 
