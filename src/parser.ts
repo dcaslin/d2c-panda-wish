@@ -60,8 +60,13 @@ function parseRoll(row: CsvRow): GunRoll {
 function parseGun(sheet: SheetDef, pveRow: CsvRow, pvpRow: CsvRow): GunRolls {
     let name = pveRow.field1.toLowerCase();
     let version = 0;
-    if (name.endsWith(' s14')) {
-        name = name.substring(0, name.length - ' s14'.length);
+    if (name.endsWith(' 1610')) {
+        name = name.substring(0, name.length - ' 1610'.length);
+        version = 1;
+        console.log('Version 1');
+    }
+    if (name.endsWith(' 1410')) {
+        name = name.substring(0, name.length - ' 1410'.length);
         version = 1;
         console.log('Version 1');
     }

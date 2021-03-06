@@ -164,7 +164,6 @@ const SHEETS: SheetDef[] = [
         mnk: false
     },
     {
-        // overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
         name: 'hunt - mnk',
         // id: '167346674', //222338306
         id: '222338306', //222338306
@@ -172,7 +171,6 @@ const SHEETS: SheetDef[] = [
         mnk: true
     },
     {
-        // overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
         name: 'hunt - controller',
         // id: '119709700', //1725410347
         id: '1725410347', // prod
@@ -180,30 +178,28 @@ const SHEETS: SheetDef[] = [
         mnk: false
     } ,
     {
-        overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
         name: 'chosen - mnk',        
-        id: '823480562', 
+        id: '1114929996', 
         controller: false,
         mnk: true
     },
     {
-        overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
         name: 'chosen - controller',
-        id: '1910720411', // prod
+        id: '622473825',
         controller: true,
         mnk: false
     },
     {
         overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
         name: 'random exotic - mnk',        
-        id: '1374253866', 
+        id: '1374253866', // WIP
         controller: false,
         mnk: true
     },
     {
         overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
         name: 'random exotic - controller',
-        id: '963951103', // prod
+        id: '963951103', // WIP
         controller: true,
         mnk: false
     } 
