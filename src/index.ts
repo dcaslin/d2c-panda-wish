@@ -13,7 +13,7 @@ async function loadManifest(): Promise<Cache> {
 const DOC_ID = '1UlPqO4koKRcqMxl2VO4JzdgkKyY7LW07W0k91S_Yl8U'; // panda
 // const DOC_ID = '1G9Lwd-cuBPyY9MdElm3V35SJwdUB7YSsJJTf3s0qwDc'; //d2c
 // const DOC_ID = '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI'; // Panda WIP
- 
+
 const SHEETS: SheetDef[] = [
     {
         name: 'crucible',
@@ -148,14 +148,14 @@ const SHEETS: SheetDef[] = [
         // id: '417047554', //417047554
         controller: true,
         mnk: false
-    }, 
+    },
     {
         name: 'arrivals - mnk',
         id: '50657812', //656190151
         // id: '656190151', //656190151
         controller: false,
         mnk: true
-    }, 
+    },
     {
         name: 'arrivals - controller',
         id: '997388828', //245264734
@@ -176,10 +176,10 @@ const SHEETS: SheetDef[] = [
         id: '1725410347', // prod
         controller: true,
         mnk: false
-    } ,
+    },
     {
-        name: 'chosen - mnk',        
-        id: '1114929996', 
+        name: 'chosen - mnk',
+        id: '1114929996',
         controller: false,
         mnk: true
     },
@@ -191,7 +191,7 @@ const SHEETS: SheetDef[] = [
     },
     {
         overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
-        name: 'random exotic - mnk',        
+        name: 'random exotic - mnk',
         id: '1374253866', // WIP
         controller: false,
         mnk: true
@@ -202,7 +202,7 @@ const SHEETS: SheetDef[] = [
         id: '963951103', // WIP
         controller: true,
         mnk: false
-    } 
+    }
 ];
 
 
@@ -238,12 +238,12 @@ async function downloadSpreadSheet(db: Cache) {
         // let csv;
         // const fileName = './tmp/' + sd.id + '.csv';
         // if (fs.existsSync(fileName)) {
-            // const csv = fs.readFileSync(fileName, 'utf-8');
-            // console.log('Found: ' + fileName + ' for ' + sd.name);
+        // const csv = fs.readFileSync(fileName, 'utf-8');
+        // console.log('Found: ' + fileName + ' for ' + sd.name);
         // } else {
-            const csv = await downloadSheet(ax, sd);
-            await fs.promises.writeFile('./tmp/' + sd.name + '.csv', csv);
-            await fs.promises.writeFile('./tmp/' + sd.id + '.csv', csv);
+        const csv = await downloadSheet(ax, sd);
+        await fs.promises.writeFile('./tmp/' + sd.name + '.csv', csv);
+        await fs.promises.writeFile('./tmp/' + sd.id + '.csv', csv);
         // }
         const guns = await parseSheet(sd, csv);
         // check early
@@ -267,7 +267,7 @@ async function downloadSpreadSheet(db: Cache) {
         allErrors += '\n';
     }
     await fs.promises.writeFile('./sheet-errors.txt', allErrors);
-    if (problems==0 ) {
+    if (problems == 0) {
         await fs.promises.writeFile('./panda-godrolls.json', JSON.stringify(cooked, null, 2));
         await fs.promises.writeFile('../d2-checklist/src/assets/panda-godrolls.min.json', JSON.stringify(cooked));
     } else {
@@ -275,12 +275,79 @@ async function downloadSpreadSheet(db: Cache) {
     }
 }
 
+function getPlugName(plugDesc: any): string|null {
+    const name = plugDesc.displayProperties.name;
+    if (name == null) { return null; }
+    if (name.trim().length == 0) { return null; }
+    if (plugDesc.plug == null) { return null; }
+    if (plugDesc.plug.plugCategoryIdentifier == null) { return null; }
+    if (plugDesc.plug.plugCategoryHash == null) { return null; }
+    const ch = plugDesc.plug.plugCategoryHash;
+    if (ch == 2947756142) { // hide trackers
+        return null;
+    }
+    return name;
+}
+
+async function printPerks(db: Cache) {
+    const lines: string[] = [];
+    for (const key of Object.keys(db.InventoryItem)) {
+        const i = db.InventoryItem[key];
+        if (i.itemType == 3 && i.sockets?.socketCategories) {
+            lines.push(`${i.displayProperties.name},${i.itemTypeDisplayName}`);
+            for (const jCat of i.sockets.socketCategories) {
+                // skip cosmetics
+                if (jCat.socketCategoryHash == 3379164649 || jCat.socketCategoryHash == 2048875504 || jCat.socketCategoryHash == 1926152773 || 760375309 == jCat.socketCategoryHash) {
+                    continue;
+                }
+                if (jCat.socketIndexes == null) { continue; }
+                for (const index of jCat.socketIndexes) {
+                    const socketDesc = i.sockets.socketEntries[index];
+                    const possiblePlugs: string[] = [];
+                    if (socketDesc.randomizedPlugSetHash) {
+                        const randomRollsDesc: any = db.PlugSet[socketDesc.randomizedPlugSetHash];
+                        if (randomRollsDesc && randomRollsDesc.reusablePlugItems) {
+                            for (const option of randomRollsDesc.reusablePlugItems) {
+                                const plugDesc: any = db.InventoryItem[option.plugItemHash];
+                                const plugName = getPlugName(plugDesc);
+                                if (plugName == null) { continue; }
+                                possiblePlugs.push(plugName);
+                            }
+                        }
+                    } else if (socketDesc.singleInitialItemHash) {
+                        const perk: any = db.InventoryItem[socketDesc.singleInitialItemHash];
+                        if (perk?.displayProperties?.name) { 
+                            possiblePlugs.push(perk?.displayProperties?.name);
+                         }
+                        
+
+                    }
+                    if (possiblePlugs.length>0) {
+                        let s = ',';
+                        for (const p of possiblePlugs) {
+                            s = `${s},${p}`;
+                        }
+                        lines.push(s);
+                    }
+                }
+            }
+            
+        }
+
+    }
+    let outlines = '';
+    for (const line of lines) {
+        outlines += line + '\r\n';
+    }    
+    await fs.promises.writeFile('./all-gun-perks.csv', outlines);
+}
+
 async function run() {
     console.log('Starting');
     try {
         const cache = await loadManifest();
-
-        await downloadSpreadSheet(cache);
+        await printPerks(cache);
+        // await downloadSpreadSheet(cache);
 
 
     } catch (exc) {

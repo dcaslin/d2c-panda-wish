@@ -102,6 +102,7 @@ export interface Cache {
     equippable: boolean;
     defaultDamageType: number;
     isWrapper: boolean;
+    sockets: any;
     hash: number;
     index: number;
     redacted: boolean;
