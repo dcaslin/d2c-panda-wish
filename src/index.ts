@@ -202,6 +202,20 @@ const SHEETS: SheetDef[] = [
         id: '963951103', // WIP
         controller: true,
         mnk: false
+    },
+    {
+        overrideDocId: '1uZ_3QrltU2YIV5FCnzJgufB0Uti7yiXj1kaFpaiuFwk',
+        name: 'splicer - controller',
+        id: '1162973001', // ryker
+        controller: true,
+        mnk: false
+    },
+    {
+        overrideDocId: '1uZ_3QrltU2YIV5FCnzJgufB0Uti7yiXj1kaFpaiuFwk',
+        name: 'splicer - mnk',
+        id: '1935730704', // WIP
+        controller: false,
+        mnk: true
     }
 ];
 
@@ -346,8 +360,8 @@ async function run() {
     console.log('Starting');
     try {
         const cache = await loadManifest();
-        await printPerks(cache);
-        // await downloadSpreadSheet(cache);
+        // await printPerks(cache);
+        await downloadSpreadSheet(cache);
 
 
     } catch (exc) {
