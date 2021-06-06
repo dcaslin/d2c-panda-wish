@@ -13,7 +13,7 @@ function dedupeGuns(allGuns: GunRolls[]): GunRolls[] {
     let dupeCount = 0;
     // first pass
     for (const gun of allGuns) {
-        const tag = gun.name + gun.version + gun.controller + gun.mnk;        
+        const tag = gun.name + gun.controller + gun.mnk;        
         if (gunsByName[tag] == null) {
             gunsByName[tag] = gun;
         } else {
@@ -31,7 +31,7 @@ function dedupeGuns(allGuns: GunRolls[]): GunRolls[] {
     gunsByName = {};
     // second pass for mkn+controller legacy vs newer that are split up (Dire Promise)
     for (const gun of deduped) {
-        const tag = gun.name + gun.version + gun.controller;
+        const tag = gun.name + gun.controller;
         if (gunsByName[tag] == null) {
             gunsByName[tag] = gun;
         } else {

@@ -12,7 +12,6 @@ export interface GunRolls {
   controller: boolean;
   pve: GunRoll;
   pvp: GunRoll;
-  version: number;
 }
 
 export interface CsvRow {
