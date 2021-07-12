@@ -10,9 +10,10 @@ async function loadManifest(): Promise<Cache> {
     return db;
 }
 
-const DOC_ID = '1UlPqO4koKRcqMxl2VO4JzdgkKyY7LW07W0k91S_Yl8U'; // panda
+// const DOC_ID = '1UlPqO4koKRcqMxl2VO4JzdgkKyY7LW07W0k91S_Yl8U'; // panda
 // const DOC_ID = '1G9Lwd-cuBPyY9MdElm3V35SJwdUB7YSsJJTf3s0qwDc'; //d2c
 // const DOC_ID = '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI'; // Panda WIP
+const DOC_ID = '1uZ_3QrltU2YIV5FCnzJgufB0Uti7yiXj1kaFpaiuFwk'; // Ryker
 
 const SHEETS: SheetDef[] = [
     {
@@ -190,28 +191,24 @@ const SHEETS: SheetDef[] = [
         mnk: false
     },
     {
-        overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
         name: 'random exotic - mnk',
-        id: '1374253866', // WIP
+        id: '1341055137', // WIP
         controller: false,
         mnk: true
     },
     {
-        overrideDocId: '12_h3BPhajJItfVeTtjAuthN3TuLHBmjnTJXqnfWGNHI',
         name: 'random exotic - controller',
-        id: '963951103', // WIP
+        id: '1262419562', // WIP
         controller: true,
         mnk: false
     },
     {
-        overrideDocId: '1uZ_3QrltU2YIV5FCnzJgufB0Uti7yiXj1kaFpaiuFwk',
         name: 'splicer - controller',
         id: '1162973001', // ryker
         controller: true,
         mnk: false
     },
     {
-        overrideDocId: '1uZ_3QrltU2YIV5FCnzJgufB0Uti7yiXj1kaFpaiuFwk',
         name: 'splicer - mnk',
         id: '1935730704', // WIP
         controller: false,
