@@ -14,6 +14,13 @@ export interface GunRolls {
   pvp: GunRoll;
 }
 
+export interface CompleteGodRolls {
+  title: string;
+  date: string; //iso date format
+  manifestVersion: string;
+  rolls: GunRolls[];
+}
+
 export interface CsvRow {
   field1: string;
   field2: string;

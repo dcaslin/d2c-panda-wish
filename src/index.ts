@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import fs from 'fs';
 import { cookGuns, validateGuns } from './cooker';
-import { Cache, GunRolls, SheetDef } from './model';
+import { Cache, CompleteGodRolls, GunRolls, SheetDef } from './model';
 import { parseSheet } from './parser';
 
 async function loadManifest(): Promise<Cache> {
@@ -270,7 +270,13 @@ async function downloadSpreadSheet(db: Cache) {
         console.log('***** Sheets are all perfect!');
     }
     await fs.promises.writeFile('./tmp/allGuns.json', JSON.stringify(allGuns, null, 2));
-    const cooked = cookGuns(allGuns);
+    const cooked2 = cookGuns(allGuns);
+    const finalRolls: CompleteGodRolls = {
+        title: 'Official D2Checklist Rolls',
+        date: new Date().toISOString(),
+        manifestVersion: db.version as string,
+        rolls: cooked2
+    }
 
     let allErrors = '';
     for (const s of errMsgs) {
@@ -279,10 +285,12 @@ async function downloadSpreadSheet(db: Cache) {
     }
     await fs.promises.writeFile('./sheet-errors.txt', allErrors);
     if (problems == 0) {
-        await fs.promises.writeFile('./panda-godrolls.json', JSON.stringify(cooked, null, 2));
-        await fs.promises.writeFile('../d2-checklist/src/assets/panda-godrolls.min.json', JSON.stringify(cooked));
+        const prettyPrint = JSON.stringify(finalRolls, null, 2);
+        await fs.promises.writeFile('./panda-godrolls.json', prettyPrint);
+        await fs.promises.writeFile('../d2-checklist/src/assets/panda-godrolls.min.json', JSON.stringify(finalRolls));
+        await fs.promises.writeFile('../d2-checklist/src/assets/panda-godrolls.json', prettyPrint);
     } else {
-        await fs.promises.writeFile('./panda-godrolls-with-errors.json', JSON.stringify(cooked, null, 2));
+        await fs.promises.writeFile('./panda-godrolls-with-errors.json', JSON.stringify(finalRolls, null, 2));
     }
 }
 
