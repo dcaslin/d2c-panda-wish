@@ -1,12 +1,12 @@
 import { Cache, GunRoll, GunRolls, SheetDef } from './model';
 
-function chooseRoll(gun1: GunRolls, gun2: GunRolls): GunRolls {
-    let returnMe = gun1;
-    if (gun2.pve.goodPerks.length > gun1.pve.goodPerks.length) {
-        returnMe = gun2;
-    }
-    return returnMe;
-}
+// function chooseRoll(gun1: GunRolls, gun2: GunRolls): GunRolls {
+//     let returnMe = gun1;
+//     if (gun2.pve.goodPerks.length > gun1.pve.goodPerks.length) {
+//         returnMe = gun2;
+//     }
+//     return returnMe;
+// }
 
 function dedupeGuns(allGuns: GunRolls[]): GunRolls[] {
     let gunsByName: { [key: string]: GunRolls } = {};
@@ -18,8 +18,9 @@ function dedupeGuns(allGuns: GunRolls[]): GunRolls[] {
             gunsByName[tag] = gun;
         } else {
             const old = gunsByName[tag];
-            gunsByName[tag] = chooseRoll(old, gun);
-            
+            // gunsByName[tag] = chooseRoll(old, gun);
+            gunsByName[tag] = gun;
+            console.log(`1st pass: removed ${tag}`);
             dupeCount++;
         }
     }
@@ -36,7 +37,9 @@ function dedupeGuns(allGuns: GunRolls[]): GunRolls[] {
             gunsByName[tag] = gun;
         } else {
             const old = gunsByName[tag];
-            gunsByName[tag] = chooseRoll(old, gun);
+            // gunsByName[tag] = chooseRoll(old, gun);
+            console.log(`2nd pass: removed ${tag}`);
+            gunsByName[tag] = gun;
             dupeCount++;
         }
     }
