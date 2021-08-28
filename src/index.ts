@@ -213,6 +213,18 @@ const SHEETS: SheetDef[] = [
         id: '1935730704', // WIP
         controller: false,
         mnk: true
+    },
+    {
+        name: 'lost - controller',
+        id: '484343420', // ryker
+        controller: true,
+        mnk: false
+    },
+    {
+        name: 'lost - mnk',
+        id: '593198654', // WIP
+        controller: false,
+        mnk: true
     }
 ];
 
@@ -291,6 +303,11 @@ async function downloadSpreadSheet(db: Cache) {
         await fs.promises.writeFile('../d2-checklist/src/assets/panda-godrolls.json', prettyPrint);
     } else {
         await fs.promises.writeFile('./panda-godrolls-with-errors.json', JSON.stringify(finalRolls, null, 2));
+    }
+    if (problems > 0) {
+        console.log(`xxxxx There are ${problems} problems to correct`);
+    } else {
+        console.log('***** Sheets are all perfect!');
     }
 }
 
