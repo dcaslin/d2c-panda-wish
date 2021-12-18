@@ -283,6 +283,8 @@ async function downloadSpreadSheet(db: Cache) {
     }
     await fs.promises.writeFile('./tmp/allGuns.json', JSON.stringify(allGuns, null, 2));
     const cooked2 = cookGuns(allGuns);
+    // sort by name
+    cooked2.sort((a, b) => a.name.localeCompare(b.name));
     const finalRolls: CompleteGodRolls = {
         title: 'Official D2Checklist Rolls',
         date: new Date().toISOString(),
